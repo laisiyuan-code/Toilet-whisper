@@ -21,6 +21,10 @@ void setup() {
 
 void loop() {
   Serial.print("Lux: ");
+  //400 ppm → fresh air
+  //600–800 → normal indoor
+  //1000+   → stuffy
+  //1500+   → poor ventilation
   Serial.println(lightSensor.getLux(), 2);
   delay(1000);
 }
