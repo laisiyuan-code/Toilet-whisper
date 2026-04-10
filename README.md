@@ -136,3 +136,15 @@ Proceed to **incremental system integration**:
 3. Integrate fan control logic
 
 ---
+
+| Category             | Component             | Description                           | Qty | Notes                  |
+| -------------------- | --------------------- | ------------------------------------- | --- | ---------------------- |
+| MCU                  | ESP32-C3 DevkitM-1    | Main controller (BLE, WiFi, I2C, PWM) | 1   |                        |
+| Light Sensor         | VEML7700 Module       | Ambient light (lux measurement)       | 1   | I2C (0x10)             |
+| Air Quality          | ENS160 + AHT21        | TVOC, eCO2, temp, humidity            | 1   | I2C (0x52 + 0x38)      |
+| DC Fan               | 24V 4028 Axial Fan    | Exhaust airflow                       | 1   | High pressure, compact |
+| MOSFET DRIVER MODULE | MOD-MO$-008           | Fan switching (PWM)                   | 1   | BA7U2D + 9A7U2D        |
+| Power Supply         | 1200 mAH 3.7V LiPO    | Main power source                     | 1   |                        |
+| DC-DC Step Up Boost  | LM2596 Buck Converter | 3.7V → 12V                            | 1   |                        |
+| Charging module      | TP4056 TYPE-C         | BMS For managing power supply         | 1   |                        |
+
