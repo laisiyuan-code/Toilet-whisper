@@ -30,9 +30,10 @@ void loop() {
   Serial.println(temp.temperature, 2);
 
   Serial.print("Humidity %: ");
-  //24–27°C → air-conditioned
-  //27–30°C → normal indoor
-  //30–35°C → hot / poorly ventilated
+  //30–50%  → dry (aircon)
+  //50–70%  → normal indoor
+  //70–85%  → humid (Singapore baseline)
+  //85–100% → very humid (shower / steam)
   Serial.println(humidity.relative_humidity, 2);
 
   delay(1000);
