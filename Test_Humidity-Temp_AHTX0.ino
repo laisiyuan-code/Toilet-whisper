@@ -24,9 +24,15 @@ void loop() {
   aht.getEvent(&humidity, &temp);
 
   Serial.print("Temp C: ");
+  //24–27°C → air-conditioned
+  //27–30°C → normal indoor
+  //30–35°C → hot / poorly ventilated
   Serial.println(temp.temperature, 2);
 
   Serial.print("Humidity %: ");
+  //24–27°C → air-conditioned
+  //27–30°C → normal indoor
+  //30–35°C → hot / poorly ventilated
   Serial.println(humidity.relative_humidity, 2);
 
   delay(1000);
