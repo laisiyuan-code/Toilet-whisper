@@ -1,0 +1,23 @@
+idf_component_register(
+    SRCS
+        "main.c"
+        "i2c_manager.c"
+        "veml7700.c"
+        "air_quality.c"
+        "ble_presence.c"
+        "fan_control.c"
+        "decision_engine.c"
+        "rainmaker_app.c"
+        "data_logger.c"
+    INCLUDE_DIRS "."
+    REQUIRES
+        driver
+        esp_timer
+        esp_event
+        esp_netif
+        esp_wifi
+        nvs_flash
+        spiffs
+        bt
+        json
+)
