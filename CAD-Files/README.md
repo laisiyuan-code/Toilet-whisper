@@ -1,5 +1,24 @@
+# CAD Files
 
-This CAD folder appears to package the mechanical design files for the `Toilet-Whisper` project in a few useful formats:
+This folder contains the mechanical design files for the Toilet Whisper build.
 
-- `CAD-Toilet-Whisper.f3z` is likely the main editable `Fusion 360` archive for the full CAD design
-- `STL-Toilet-Whisper.zip` appears to contain exported `STL` files for 3D printing or sharing printable parts
+## Files in This Folder
+
+| File | Purpose |
+|---|---|
+| `CAD-Toilet-Whisper.f3z` | Main editable Fusion 360 project archive |
+| `STL-Toilet-Whisper.zip` | Exported STL files for printing the physical parts |
+
+## Who This Folder Is For
+
+Use this folder if you want to:
+- print the enclosure
+- modify the enclosure in Fusion 360
+- inspect how the physical parts fit together
+- adapt the design for different hardware dimensions
+
+## Recommended Workflow
+
+1. Open `CAD-Toilet-Whisper.f3z` in Fusion 360 if you want to edit the design
+2. Use `STL-Toilet-Whisper.zip` if you only want printable files
+3. Dry-fit the printed parts with your PCB, ESP32 board, fan, and wiring before final assembly
