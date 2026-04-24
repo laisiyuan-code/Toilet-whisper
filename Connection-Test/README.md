@@ -1,138 +1,112 @@
-# Connection Test Suite (ESP32 + I2C Sensors + PWM Fan)
+# Connection Test Guide
 
-This repository contains test sketches to verify wiring and functionality for:
+Use this folder to verify your hardware before moving on to the full ESP-IDF firmware.
 
-- AHT21 (Temperature & Humidity)
-- VEML7700 (Light Sensor)
-- ENS160 (Air Quality Sensor)
-- PWM Fan Control
+This is the best starting point if you are building the project yourself.
 
----
+## What This Folder Is For
 
-## ⚡ Quick Start (READ THIS FIRST)
+These Arduino sketches help you confirm:
+- your ESP32-C3 is detected correctly
+- your I2C sensors are wired correctly
+- your sensors return sensible data
+- your fan PWM stage responds as expected
 
-Follow this exact order:
+## Files in This Folder
 
-1. Install required libraries
-2. Wire all components
-3. Run **I2C Scanner**
-4. Confirm all devices are detected
-5. Test sensors individually
-6. Test PWM fan last
+| File | Purpose |
+|---|---|
+| `Test_I2C_Scanner.ino` | Confirms which I2C devices are visible |
+| `Test_Humidity-Temp_AHTX0.ino` | Tests the AHT21 |
+| `Test_Light-Sensor_VEML7700.ino` | Tests the VEML7700 |
+| `Test_Air-Quality_ENS160.ino` | Tests the ENS160 |
+| `Test_Fan_PWN.ino` | Tests PWM fan control |
 
-> ❗ If the I2C scanner fails, **do not proceed**
+## Recommended Order
 
----
+Follow these steps in order:
 
-## ⚙️ Setup
+1. Run the I2C scanner
+2. Test the AHT21
+3. Test the VEML7700
+4. Test the ENS160
+5. Test the fan PWM output last
 
-### 📦 Required Libraries
+If the scanner does not detect your devices, stop there and fix wiring first.
 
-Install via **Arduino IDE → Library Manager**:
-
-| Sensor | Library Name | Author |
-|--------|-------------|--------|
-| AHT21 | `Adafruit AHTX0` | Adafruit |
-| VEML7700 | `SparkFun VEML7700 Arduino Library` | SparkFun |
-| ENS160 | `ScioSense ENS160` | ScioSense |
-| I2C | `Wire` | Built-in |
-
----
-
-### 🧭 Installation Steps
-
-1. Open Arduino IDE  
-2. Go to **Sketch → Include Library → Manage Libraries**  
-3. Search and install each library  
-
----
-
-### ⚠️ Notes
-
-- `Wire` is pre-installed  
-- Use exact library names  
-- Compile errors = missing library  
-
----
-
-## 🔌 Wiring
+## Basic Wiring
 
 | Function | GPIO |
-|---------|------|
-| SDA     | 6    |
-| SCL     | 7    |
-| Fan PWM | 3    |
+|---|---|
+| SDA | `GPIO6` |
+| SCL | `GPIO7` |
+| Fan PWM | `GPIO3` |
 
-All I2C devices must share:
-- Common **GND**
-- Correct **VCC**
-- Same **SDA/SCL lines**
+Important wiring rules:
+- all I2C devices must share the same `SDA` and `SCL`
+- all modules must share a common `GND`
+- power each sensor with the correct voltage for that module
+- do not connect the fan directly to the ESP32 pin
 
----
+## Required Arduino Libraries
 
-## 📡 Step 1 — I2C Scanner (MANDATORY)
+Install these from the Arduino IDE Library Manager:
 
-**File:** `Test_I2C_Scanner.ino`
+| Sensor | Library |
+|---|---|
+| AHT21 | `Adafruit AHTX0` |
+| VEML7700 | `SparkFun VEML7700 Arduino Library` |
+| ENS160 | `ScioSense ENS160` |
+| I2C | `Wire` |
 
-### ✅ Pass Condition
+## Step 1: Run the I2C Scanner
 
-You should see:
+Open `Test_I2C_Scanner.ino` and upload it first.
 
-| Device   | Address |
-|----------|--------|
-| VEML7700 | 0x10   |
-| AHT21    | 0x38   |
-| ENS160   | 0x52 / 0x53 |
+Expected addresses:
+- `VEML7700` at `0x10`
+- `AHT21` at `0x38`
+- `ENS160` at `0x52` or `0x53`
 
----
+If no devices appear:
+- check SDA and SCL are not swapped
+- check the sensor power rails
+- check common ground
+- confirm the correct board and port are selected
+- try another USB cable
 
-### ❌ Fail Condition
+## Step 2: Test the AHT21
 
-No devices detected → check:
+Open `Test_Humidity-Temp_AHTX0.ino`.
 
-- SDA/SCL swapped
-- No power to sensors
-- Missing common ground
-- Wrong board/port
-- Faulty USB cable
+Success looks like:
+- repeated temperature output
+- repeated humidity output
+- values that change slowly with room conditions
 
----
+If it fails:
+- make sure `0x38` showed up in the scanner
+- recheck the library install
+- recheck sensor power and wiring
 
-## 🌡️ Step 2 — AHT21 Test
+## Step 3: Test the VEML7700
 
-**File:** `Test_Humidity-Temp_AHTX0.ino`
+Open `Test_Light-Sensor_VEML7700.ino`.
 
-### ✅ Pass Condition
-- Prints temperature and humidity continuously
+Success looks like:
+- lux values updating in real time
+- the reading drops when you cover the sensor
+- the reading rises when you shine light on it
 
-### ❌ Fail Condition
-- "Sensor not detected" → check if `0x38` appeared in scanner
+If it fails:
+- make sure `0x10` showed up in the scanner
+- confirm the correct library is installed
 
----
+## Step 4: Test the ENS160
 
-## 💡 Step 3 — VEML7700 Test
+Open `Test_Air-Quality_ENS160.ino`.
 
-**File:** `Test_Light-Sensor_VEML7700.ino`
-
-### ✅ Pass Condition
-- Lux values update in real-time
-
-### Quick Test
-- Cover sensor → value drops  
-- Shine light → value increases  
-
-### ❌ Fail Condition
-- Not detected → check for `0x10` in scanner
-
----
-
-## 🌫️ Step 4 — ENS160 Test
-
-**File:** `Test_Air-Quality_ENS160.ino`
-
-### ⚠️ IMPORTANT (Address Setting)
-
-Match the address to your scanner result:
+Before uploading, match the constructor address to your scanner result:
 
 ```cpp
 ScioSense_ENS160 ens160(0x52); // or 0x53
