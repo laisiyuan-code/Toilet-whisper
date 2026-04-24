@@ -1,6 +1,3 @@
-
-**`SCHEMATICS & PCB/README.md`**
-```md
 # Schematics and PCB
 
 This folder contains the board-level design summary for the Toilet Whisper hardware.
