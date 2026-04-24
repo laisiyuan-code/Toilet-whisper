@@ -77,15 +77,6 @@ This is the best time to catch wiring issues without reopening the whole enclosu
 ### Step 7: Close the enclosure
 Once everything is working, install the backplate using `2 x M3 8 mm SHCS`.
 
-## Recommended Additions
-
-To make this folder even more helpful for other builders, I recommend adding:
-- a rendered image of the full enclosure
-- one image showing each printed part
-- labels for which STL matches which part
-- a quick exploded view if possible
-- notes on any tight tolerances or tricky fits
-
 ## Summary
 
 This folder contains both the editable Fusion 360 design and the STL exports used to print the Toilet Whisper enclosure, along with the print settings and assembly process used in the final build.
