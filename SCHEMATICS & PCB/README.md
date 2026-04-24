@@ -1,80 +1,97 @@
-# PCB and Schematic Summary
 
-This board is a compact `ESP32-C3` fan controller designed around three main sections:
+**`SCHEMATICS & PCB/README.md`**
+```md
+# Schematics and PCB
 
-- `12V` fan power input
-- low-voltage control and battery/power management
-- sensor and control connections to the `ESP32-C3 DevKitM-1`
+This folder contains the board-level design summary for the Toilet Whisper hardware.
 
-## Main Idea
+It is meant to help builders understand how power, control, sensing, and fan driving are connected before they assemble or debug the system.
 
-The schematic separates high-power fan wiring from low-voltage logic wiring. That keeps the control side cleaner and makes the board easier to route and debug.
+## What This Hardware Does
 
-## Main Blocks
+The board centers around an `ESP32-C3 DevKitM-1` and connects:
+- fan power and fan switching
+- low-voltage control electronics
+- shared I2C sensors
+- battery and charging hardware
 
-### 1. Fan Power
+## Main Hardware Blocks
 
-- `VIN` and `VIN_GND` bring `12V` onto the board
-- the fan is powered from the `12V` side
-- the fan control stage receives a `TRIG/PWM` signal from the ESP32
+### Fan Power
+- `VIN` and `VIN_GND` bring power into the board
+- the fan is powered from the higher-voltage side
+- the fan control stage receives a PWM trigger from the ESP32
 
-### 2. Power Conversion
+### Power Conversion
+- an `LM2596` module handles voltage conversion
+- a `TP4056` module handles battery charging
+- the battery section supports portable power operation
 
-- an `LM2596` buck converter steps the input voltage down for the controller side
-- a `TP4056` charger module and `3.7V` battery section provide the battery/power-management part of the design
-
-### 3. ESP32-C3 Control
-
-The `ESP32-C3 DevKitM-1` is the center of the board and handles:
-
+### ESP32-C3 Control
+The `ESP32-C3 DevKitM-1` handles:
 - fan control
-- I2C sensor communication
-- firmware logic and RainMaker connectivity
+- sensor communication
+- firmware logic
+- RainMaker connectivity
 
 ## Important Pin Mapping
 
-- `GPIO3` -> fan `TRIG/PWM`
-- `GPIO6` -> `SDA`
-- `GPIO7` -> `SCL`
+| Function | GPIO |
+|---|---|
+| Fan PWM | `GPIO3` |
+| SDA | `GPIO6` |
+| SCL | `GPIO7` |
 
-These match the firmware implementation in:
-
-- [main/app_priv.h](/C:/esp/v5.4.4/fan_controller/main/app_priv.h:16)
-- [main/app_driver.c](/C:/esp/v5.4.4/fan_controller/main/app_driver.c:25)
-- [main/app_main.c](/C:/esp/v5.4.4/fan_controller/main/app_main.c:352)
+These mappings should match the firmware constants in the ESP-IDF project.
 
 ## Sensor Connections
 
-The board uses one shared I2C bus for the sensors:
+The board uses a shared I2C bus for:
+- `VEML7700`
+- `AHT21`
+- `ENS160`
 
-- `VEML7700` light sensor
-- `ENS160` air-quality sensor
-- `AHT21` temperature/humidity sensor
+This keeps wiring simple and reduces GPIO usage.
 
-This keeps the wiring simple and reduces the number of GPIOs used.
+## PCB Layout Intent
 
-## PCB Layout Strategy
+The board is arranged by function so it is easier to read and debug:
+- fan and power routing on one side
+- controller in the center
+- sensor connections grouped together
+- power modules placed where wiring is manageable
 
-The PCB is arranged by function:
+This layout helps keep:
+- high-current traces shorter
+- logic and sensing traces cleaner
+- the design easier to understand visually
 
-- fan and `12V` routing on one side
-- `ESP32-C3` in the center
-- sensor connections on the other side
-- power modules near the bottom
+## Bring-Up Checklist
 
-This helps keep:
+Before powering the full system:
+- verify the voltage output of the power stage
+- confirm grounds are shared correctly
+- confirm the fan is connected through the driver stage
+- confirm sensor modules are on the correct I2C lines
+- confirm there are no shorts before installing the ESP32
 
-- high-current traces short and wide
-- sensor traces cleaner
-- the board easier to understand visually
+## Safety Notes
 
-## What a New User Should Know
+- do not connect the fan directly to an ESP32 pin
+- verify converter output before powering the controller
+- be careful when working with batteries and charging modules
+- disconnect power before rewiring
 
-- do not drive the fan directly from an ESP32 pin
-- make sure the buck converter output is correct before powering the ESP32
-- keep grounds shared between the control and fan sections
-- confirm your sensor modules use the expected I2C addresses
+## Suggested Additions for This Folder
 
-## In One Sentence
+To make this section more useful for other builders, add:
+- a labeled schematic image
+- a top-view PCB image
+- a short BOM
+- connector labels
+- voltage notes for each subsystem
+- manufacturing notes if someone wants to order the PCB
 
-This PCB was designed by separating `12V` fan power, low-voltage control, and shared I2C sensing around a central `ESP32-C3` so the hardware layout matches the firmware cleanly.
+## Summary
+
+This folder explains how the Toilet Whisper hardware is organized so the PCB layout, schematic, sensors, fan driver, and firmware all line up cleanly.
