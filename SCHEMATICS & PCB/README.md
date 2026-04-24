@@ -82,16 +82,3 @@ Before powering the full system:
 - be careful when working with batteries and charging modules
 - disconnect power before rewiring
 
-## Suggested Additions for This Folder
-
-To make this section more useful for other builders, add:
-- a labeled schematic image
-- a top-view PCB image
-- a short BOM
-- connector labels
-- voltage notes for each subsystem
-- manufacturing notes if someone wants to order the PCB
-
-## Summary
-
-This folder explains how the Toilet Whisper hardware is organized so the PCB layout, schematic, sensors, fan driver, and firmware all line up cleanly.
